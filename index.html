@@ -31,15 +31,17 @@
       </div>
     </header>
     <main class="container-main">
-      <h1>Personagens de Rick and Morty</h1>
-      <div class="container-characteres"></div>
+      <h1>Rick and Morty characters</h1>
+      <div id="container-characters"></div>
 
       <div class="container-pagination container-main">
-        <button id="prev-pagination" onclick="requestCharacteres('prev')">
+        <button id="prev-pagination" onclick="requestCharacters('prev')">
           &lt;
         </button>
-        <button onclick="requestCharacteres('next')">&gt;</button>
+        <button onclick="requestCharacters('next')">&gt;</button>
       </div>
+
+      <div id="modal"></div>
     </main>
     <footer>
       <div class="container-main">

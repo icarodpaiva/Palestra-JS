@@ -1,15 +1,17 @@
 let page = 1
-const containerCharacteres = document.querySelector('.container-characteres')
-const prevPagination = document.querySelector('#prev-pagination')
+let charactersList = []
+const containerCharacters = document.querySelector("#container-characters")
+const prevPagination = document.querySelector("#prev-pagination")
+const modal = document.querySelector("#modal")
 
-const requestCharacteres = async changePage => {
-  containerCharacteres.innerHTML = '<div class="loading">Carregando...</div>'
+const requestCharacters = async changePage => {
+  containerCharacters.innerHTML = '<div class="loading">Loading...</div>'
 
-  if (changePage === 'next') {
+  if (changePage === "next") {
     page++
   }
 
-  if (changePage === 'prev') {
+  if (changePage === "prev") {
     page--
   }
 
@@ -28,17 +30,22 @@ const requestCharacteres = async changePage => {
       results {
         id
         image
-        name    
+        name
         species
+        status        
+        origin {
+          name
+          dimension
+        }              
       }
     }
   }`
   const variables = { page }
 
-  const response = await fetch('https://rickandmortyapi.com/graphql', {
-    method: 'POST',
+  const response = await fetch("https://rickandmortyapi.com/graphql", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       query,
@@ -47,24 +54,47 @@ const requestCharacteres = async changePage => {
   })
   const {
     data: {
-      characters: { results: characteresList }
+      characters: { results }
     }
   } = await response.json()
 
-  showCharacteres(characteresList)
+  charactersList = [...results]
+  showCharacters()
 }
 
-const showCharacteres = characteresList => {
-  const characters = characteresList.map(
+const showCharacters = () => {
+  charactersToRender = charactersList.map(
     character =>
-      `<div class="container-character">
+      `<div class="container-character" role="button" onclick="showModal('${character.id}')">
         <p><img src=${character.image}></p>
-        <p>Nome: <strong>${character.name}</strong></p>
-        <p>Espécie: ${character.species}</p>
+        <p>Name: <strong>${character.name}</strong></p>
+        <p>Species: ${character.species}</p>
       </div>`
   )
 
-  containerCharacteres.innerHTML = characters.join('')
+  containerCharacters.innerHTML = charactersToRender.join("")
 }
 
-requestCharacteres()
+const showModal = id => {
+  const characterClicked = charactersList.find(character => character.id === id)
+
+  const modalInfos = `<button onclick="closeModal()">X</button>
+        <div class="container-character">
+          <p><img src=${characterClicked.image}></p>
+          <p>Name: <strong>${characterClicked.name}</strong></p>
+          <p>Species: ${characterClicked.species}</p>
+          <p>Status: ${characterClicked.status}</p>     
+          <p>Origin name: ${characterClicked.origin.name}</p>
+          <p>Origin dimension: ${characterClicked.origin.dimension}</p>
+        </div>`
+
+  modal.innerHTML = modalInfos
+  modal.style.display = "flex"
+}
+
+const closeModal = () => {
+  modal.innerHTML = ""
+  modal.style.display = "none"
+}
+
+requestCharacters()

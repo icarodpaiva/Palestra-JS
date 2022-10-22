@@ -66,7 +66,7 @@ const showCharacters = () => {
   charactersToRender = charactersList.map(
     character =>
       `<div class="container-character" role="button" onclick="showModal('${character.id}')">
-        <p><img src=${character.image}></p>
+        <p><img src=${character.image} /></p>
         <p>Name: <strong>${character.name}</strong></p>
         <p>Species: ${character.species}</p>
       </div>`
@@ -80,7 +80,7 @@ const showModal = id => {
 
   const modalInfos = `<button onclick="closeModal()">X</button>
         <div class="container-character">
-          <p><img src=${characterClicked.image}></p>
+          <p><img src=${characterClicked.image} /></p>
           <p>Name: <strong>${characterClicked.name}</strong></p>
           <p>Species: ${characterClicked.species}</p>
           <p>Status: ${characterClicked.status}</p>     
